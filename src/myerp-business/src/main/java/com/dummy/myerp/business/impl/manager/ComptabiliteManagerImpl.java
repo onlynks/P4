@@ -1,6 +1,12 @@
 package com.dummy.myerp.business.impl.manager;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
@@ -95,9 +101,11 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
      * @throws FunctionalException Si l'Ecriture comptable ne respecte pas les règles de gestion
      */
     // TODO tests à compléter
-    protected void checkEcritureComptableUnit(EcritureComptable pEcritureComptable) throws FunctionalException {
+    public void checkEcritureComptableUnit(EcritureComptable pEcritureComptable) throws FunctionalException {
+    	
         // ===== Vérification des contraintes unitaires sur les attributs de l'écriture
         Set<ConstraintViolation<EcritureComptable>> vViolations = getConstraintValidator().validate(pEcritureComptable);
+        
         if (!vViolations.isEmpty()) {
             throw new FunctionalException("L'écriture comptable ne respecte pas les règles de gestion.",
                                           new ConstraintViolationException(
@@ -134,6 +142,25 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
 
         // TODO ===== RG_Compta_5 : Format et contenu de la référence
         // vérifier que l'année dans la référence correspond bien à la date de l'écriture, idem pour le code journal...
+        String codeJournal = pEcritureComptable.getJournal().getCode();
+              
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(pEcritureComptable.getDate());
+        String annee = Integer.toString(calendar.get(Calendar.YEAR));
+        
+        String refWithoutId = pEcritureComptable.getReference().split("/")[0];
+        String codeJournalRef = refWithoutId.split("-")[0];
+        String anneeRef = refWithoutId.split("-")[1];  
+        
+        if(!codeJournal.equals(codeJournalRef)) {
+        	throw new FunctionalException(
+                    "Les deux premiers caractères de la référence doivent correspondre au code journal.");
+        }
+        
+        if(!annee.equals(anneeRef)) {
+        	throw new FunctionalException(
+                    "La référence doit contenir l'année correspondant à la date de l'écriture");
+        }        
     }
 
 

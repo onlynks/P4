@@ -10,8 +10,6 @@
     
     <import resource="classpath:/com/dummy/myerp/consumer/applicationContext.xml"/>
     
-
-
     <!-- Business Context -->
     <import resource="classpath:/com/dummy/myerp/business/applicationContext.xml"/>
     <import resource="classpath:/com/dummy/myerp/business/transactionContext.xml"/>
@@ -20,16 +18,9 @@
     <bean id="dataSourceMYERP"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.postgresql.Driver" />
-        <property name="url" value="jdbc:postgresql://localhost:5432/db_myerp" />
+        <property name="url" value="jdbc:postgresql://192.168.99.100:9032/db_myerp" />
         <property name="username" value="usr_myerp" />
         <property name="password" value="myerp" />
-        
-        <!--<property name="socketTimeout" value="10"/>-->
-        <property name="connectionProperties">
-            <props>
-                <prop key="socketTimeout">10</prop>
-            </props>
-        </property>
    </bean>
    
 </beans>
