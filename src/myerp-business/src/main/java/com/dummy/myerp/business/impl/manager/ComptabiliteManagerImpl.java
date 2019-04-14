@@ -21,6 +21,7 @@ import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
+import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import com.dummy.myerp.technical.exception.NotFoundException;
 
@@ -63,24 +64,68 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
 
     /**
      * {@inheritDoc}
+     * @throws NotFoundException 
      */
     // TODO à tester
     @Override
     public synchronized void addReference(EcritureComptable pEcritureComptable) {
-        // TODO à implémenter
-        // Bien se réferer à la JavaDoc de cette méthode !
-        /* Le principe :
-                1.  Remonter depuis la persitance la dernière valeur de la séquence du journal pour l'année de l'écriture
-                    (table sequence_ecriture_comptable)
-                2.  * S'il n'y a aucun enregistrement pour le journal pour l'année concernée :
-                        1. Utiliser le numéro 1.
-                    * Sinon :
-                        1. Utiliser la dernière valeur + 1
-                3.  Mettre à jour la référence de l'écriture avec la référence calculée (RG_Compta_5)
-                4.  Enregistrer (insert/update) la valeur de la séquence en persitance
-                    (table sequence_ecriture_comptable)
-         */
+    	String code = pEcritureComptable.getJournal().getCode();
+    	
+		Calendar calendar = new GregorianCalendar();
+        calendar.setTime(pEcritureComptable.getDate());
+        Integer annee = calendar.get(Calendar.YEAR);
+        
+        Integer derniereValeur;
+        
+		try {
+			SequenceEcritureComptable sec = getDaoProxy().getComptabiliteDao().getSequenceEcritureComptable(code, annee);
+			
+			derniereValeur = sec.getDerniereValeur()+1;
+        	sec.setDerniereValeur(derniereValeur);
+        	getDaoProxy().getComptabiliteDao().updateSequenceEcritureComptable(sec);
+        	
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+			
+			SequenceEcritureComptable newSec = new SequenceEcritureComptable();
+        	derniereValeur = 1;
+        	
+        	newSec.setCodeJournal(code);
+        	newSec.setAnnee(annee);
+        	newSec.setDerniereValeur(derniereValeur);
+        	System.out.println(newSec.toString());
+        	
+    		try {
+				getDaoProxy().getComptabiliteDao().createSequenceEcritureComptable(newSec);
+			} catch (NotFoundException e1) {
+				e1.printStackTrace();
+			}
+		}
+        
+        String numeroSequenceString = String.valueOf(derniereValeur);
+		
+		Integer nombreDeZero = 5 - numeroSequenceString.length();
+		String zeros = "";
+		for(int i = 0; i < nombreDeZero; i++) {
+			zeros += "0";
+			
+		}
+		
+		pEcritureComptable.setReference(code + "-" + annee + "/" + zeros + numeroSequenceString);
     }
+ // TODO à implémenter
+    // Bien se réferer à la JavaDoc de cette méthode !
+    /* Le principe :
+            1.  Remonter depuis la persitance la dernière valeur de la séquence du journal pour l'année de l'écriture
+                (table sequence_ecriture_comptable)
+            2.  * S'il n'y a aucun enregistrement pour le journal pour l'année concernée :
+                    1. Utiliser le numéro 1.
+                * Sinon :
+                    1. Utiliser la dernière valeur + 1
+            3.  Mettre à jour la référence de l'écriture avec la référence calculée (RG_Compta_5)
+            4.  Enregistrer (insert/update) la valeur de la séquence en persitance
+                (table sequence_ecriture_comptable)
+     */
 
     /**
      * {@inheritDoc}
@@ -150,7 +195,8 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         
         String refWithoutId = pEcritureComptable.getReference().split("/")[0];
         String codeJournalRef = refWithoutId.split("-")[0];
-        String anneeRef = refWithoutId.split("-")[1];  
+        String anneeRef = refWithoutId.split("-")[1];
+        
         
         if(!codeJournal.equals(codeJournalRef)) {
         	throw new FunctionalException(

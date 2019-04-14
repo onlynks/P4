@@ -1,6 +1,8 @@
 package com.dummy.myerp.testbusiness.business;
 
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -11,7 +13,10 @@ import com.dummy.myerp.business.contrat.manager.ComptabiliteManager;
 import com.dummy.myerp.business.impl.TransactionManager;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
+import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
+import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
+import com.dummy.myerp.technical.exception.NotFoundException;
 
 
 /**
@@ -45,19 +50,28 @@ public abstract class BusinessTestCase {
     public static TransactionManager getTransactionManager() {
         return TRANSACTION_MANAGER;
     }
-   /*
+   
     @Test
-    public void testgetListCompteComptable() {
-    	ComptabiliteManager comptabiliteManager = SpringRegistry.getBusinessProxy().getComptabiliteManager();
+    public void test() {
+    	ComptabiliteManager CM = SpringRegistry.getBusinessProxy().getComptabiliteManager();
     	
-    	List<EcritureComptable> testList = comptabiliteManager.getListEcritureComptable();
-    	EcritureComptable ecriture = testList.get(1);
-    	System.out.println(ecriture.toString());
-    	try {
-			comptabiliteManager.checkEcritureComptable(ecriture);
-		} catch (FunctionalException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }*/
+    	List<EcritureComptable> listEcriture = CM.getListEcritureComptable();
+    	EcritureComptable ecriture = listEcriture.get(0);
+    	
+    	/*
+    	EcritureComptable ecriture = new EcritureComptable();
+    	
+    	ecriture.setJournal(new JournalComptable("AC", "Achat"));
+    	ecriture.setDate(new Date());
+    	ecriture.setLibelle("Libelle");
+    	ecriture.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
+                                                                                 null, new BigDecimal(123),
+                                                                                 null));
+    	ecriture.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
+                                                                                 null, null,
+                                                                                 new BigDecimal(123)));
+    	*/
+    	CM.addReference(ecriture);
+    	System.out.println(ecriture.getReference());
+    }
 }
