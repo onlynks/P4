@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.dummy.myerp.business.contrat.BusinessProxy;
 import com.dummy.myerp.business.impl.TransactionManager;
+import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
 
 
 /**
@@ -92,5 +93,14 @@ public final class SpringRegistry {
      */
     public static TransactionManager getTransactionManager() {
         return (TransactionManager) SpringRegistry.getBean("TransactionManager");
+    }
+    
+    /**
+     * Renvoie l'instance de {@link DaoProxy} de l'application
+     *
+     * @return {@link DaoProxy}
+     */
+    public static DaoProxy getDaoProxy() {
+        return (DaoProxy) SpringRegistry.getBean("DaoProxy");
     }
 }

@@ -35,7 +35,7 @@ public class ComptabiliteManagerImplTest {
         
         manager.checkEcritureComptableUnit(vEcritureComptable);
     }
-/*
+
     @Test(expected = FunctionalException.class)
     public void checkEcritureComptableUnitViolation() throws Exception {
         EcritureComptable vEcritureComptable;
@@ -73,6 +73,6 @@ public class ComptabiliteManagerImplTest {
                                                                                  null, new BigDecimal(123),
                                                                                  null));
         manager.checkEcritureComptableUnit(vEcritureComptable);
-    }*/
+    }
 
 }
