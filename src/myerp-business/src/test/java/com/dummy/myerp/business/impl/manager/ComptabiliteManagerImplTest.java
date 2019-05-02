@@ -17,7 +17,7 @@ public class ComptabiliteManagerImplTest {
 
     private ComptabiliteManagerImpl manager = new ComptabiliteManagerImpl();
 
-//test 2
+//test 3
     @Test
     public void checkEcritureComptableUnit() throws Exception {
         EcritureComptable vEcritureComptable;
