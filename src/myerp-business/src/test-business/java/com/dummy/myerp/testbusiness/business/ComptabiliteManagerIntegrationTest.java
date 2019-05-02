@@ -50,9 +50,9 @@ public class ComptabiliteManagerIntegrationTest extends BusinessTestCase{
 			
 		} catch (NotFoundException e) {			
 		}
-		
+				
 		Assert.assertTrue(dernierValeure+1 == dernierValeureApresFonction);
-		Assert.assertTrue(ecritureComptable.getReference().equals("AC-2016/00041"));
+		Assert.assertTrue(ecritureComptable.getReference().equals("AC-2016/00042"));
 	}
 	
 	@Test
