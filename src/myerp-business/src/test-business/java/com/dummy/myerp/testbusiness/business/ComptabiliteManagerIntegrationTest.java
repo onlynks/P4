@@ -52,7 +52,7 @@ public class ComptabiliteManagerIntegrationTest extends BusinessTestCase{
 		}
 				
 		Assert.assertTrue(dernierValeure+1 == dernierValeureApresFonction);
-		Assert.assertTrue(ecritureComptable.getReference().equals("AC-2016/00042"));
+		Assert.assertTrue(ecritureComptable.getReference().equals("AC-2016/00041"));
 	}
 	
 	@Test
