@@ -28,7 +28,7 @@ public class ComptabiliteManagerIntegrationTest extends BusinessTestCase{
 	public static void setUpBeforeClass() {
 		cm = SpringRegistry.getBusinessProxy().getComptabiliteManager();
 		dao = SpringRegistry.getDaoProxy().getComptabiliteDao();
-	}
+	} 
 	
 	@Test
 	public void testAddReferenceExisting() {
