@@ -97,7 +97,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
 				getDaoProxy().getComptabiliteDao().updateSequenceEcritureComptable(sequenceEcriture);
 			}
 		} catch (NotFoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
